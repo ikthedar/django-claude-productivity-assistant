@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productivity Assistant</title>
+</head>
+<body>
+    <h1>Productivity Assistant</h1>
+    <form id="query-form">
+        <textarea name="query" placeholder="Ask me anything..." required></textarea>
+        <button type="submit">Get Answer</button>
+    </form>
+    <div id="response"></div>
+
+    <script>
+        document.getElementById("query-form").onsubmit = async (e) => {
+            e.preventDefault();
+            const query = e.target.query.value;
+            const responseDiv = document.getElementById("response");
+
+            const response = await fetch("{% url 'productivity_assistant' %}", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ query }),
+            });
+            const data = await response.json();
+            responseDiv.innerHTML = `<p>${data.response}</p>`;
+        };
+    </script>
+</body>
+</html>
